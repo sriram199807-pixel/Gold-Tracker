@@ -1,39 +1,223 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Gold Prediction Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Market Dashboard</title>
+    <!-- Importing a professional font from Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: sans-serif; text-align: center; background: #121212; color: white; padding: 50px; }
-        .card { background: #1e1e1e; padding: 20px; border-radius: 15px; display: inline-block; min-width: 300px; border: 1px solid #333; }
-        .price { font-size: 2.5em; color: #ffd700; margin: 10px 0; }
-        .update { font-size: 0.8em; color: #888; }
-        .signal { font-weight: bold; padding: 10px; border-radius: 5px; margin-top: 15px; }
+        /* Modern Dark Gradient Background */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%); 
+            color: #ffffff; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+
+        /* Glassmorphism Card Effect */
+        .container { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            padding: 40px 30px; 
+            border-radius: 24px; 
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); 
+            text-align: center; 
+            width: 360px; 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+        }
+
+        /* Header with Live Pulsing Dot */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 { 
+            font-size: 20px; 
+            font-weight: 700; 
+            margin: 0; 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* Price Boxes */
+        .price-box { 
+            margin: 20px 0; 
+            padding: 20px; 
+            background: rgba(0, 0, 0, 0.2); 
+            border-radius: 16px; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .price-box:hover {
+            transform: translateY(-5px);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .price-title { 
+            font-size: 13px; 
+            color: #cbd5e1; 
+            margin-bottom: 8px; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            font-weight: 500;
+        }
+
+        /* Golden Text Gradient */
+        .gold-value { 
+            font-size: 36px; 
+            font-weight: 800; 
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        /* Silver Text Gradient */
+        .silver-value { 
+            font-size: 30px; 
+            font-weight: 800; 
+            background: linear-gradient(to right, #757f9a, #d7dde8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        /* Modern Button */
+        .btn { 
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white; 
+            border: none; 
+            padding: 14px 20px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            margin-top: 20px; 
+            width: 100%; 
+            font-size: 15px; 
+            font-weight: 600; 
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover { 
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .update-time { 
+            font-size: 12px; 
+            color: #64748b; 
+            margin-top: 25px; 
+            font-weight: 300;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>Live Gold/Silver Guide</h2>
-        <div id="goldPrice" class="price">Loading...</div>
-        <div id="silverPrice" style="color:#c0c0c0">Silver: --</div>
-        <div id="advice" class="signal">Analyzing...</div>
-        <p class="update">Last Updated: <span id="time">--</span></p>
+
+<div class="container">
+    <div class="header">
+        <div class="live-dot"></div>
+        <h1>Live Market</h1>
     </div>
 
-    <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbw-YSw-IP8Hpqpl3x5spYLFqwtSHh9fAool9gLjdIOz5Al04gD6T3F3o8n9v4irliFM/exec';
-        async function updateData() {
-            const response = await fetch(scriptURL);
-            const data = await response.json();
-            document.getElementById('goldPrice').innerText = "$" + data.gold;
-            document.getElementById('silverPrice').innerText = "Silver: $" + data.silver;
-            document.getElementById('time').innerText = data.lastUpdated;
+    <div class="price-box">
+        <div class="price-title">22K Gold (8g / 1 Pavan)</div>
+        <div class="gold-value" id="goldPrice">Fetching...</div>
+    </div>
+
+    <div class="price-box">
+        <div class="price-title">Pure Silver (10g)</div>
+        <div class="silver-value" id="silverPrice">Fetching...</div>
+    </div>
+
+    <button class="btn" onclick="fetchPrices()">Sync Latest Prices</button>
+    
+    <div class="update-time" id="lastUpdated">Initializing connection...</div>
+</div>
+
+<script>
+    // Your actual API Key from GoldAPI.io
+    const API_KEY = 'goldapi-fa446410826cf957aeacf23d906584fe-io';
+
+    async function fetchPrices() {
+        document.getElementById('goldPrice').innerText = "...";
+        document.getElementById('silverPrice').innerText = "...";
+        document.getElementById('lastUpdated').innerText = "Syncing with global market...";
+
+        const headers = {
+            "x-access-token": API_KEY,
+            "Content-Type": "application/json"
+        };
+
+        try {
+            // Fetch live data directly from the API
+            const goldRes = await fetch('https://www.goldapi.io/api/XAU/INR', { headers });
+            const goldData = await goldRes.json();
             
-            const adviceBox = document.getElementById('advice');
-            adviceBox.innerText = data.advice;
-            adviceBox.style.background = data.advice.includes("BUY") ? "#2e7d32" : "#c62828";
+            const silverRes = await fetch('https://www.goldapi.io/api/XAG/INR', { headers });
+            const silverData = await silverRes.json();
+
+            // --- THE MATH (Automated conversion to 22K and 8 Grams) ---
+            const gram24k = goldData.price / 31.103;
+            const gram22k = gram24k * 0.916; 
+            const pavan22k = gram22k * 8;    
+
+            const silver10g = (silverData.price / 31.103) * 10;
+
+            // Format with commas
+            document.getElementById('goldPrice').innerText = "₹" + Math.round(pavan22k).toLocaleString('en-IN');
+            document.getElementById('silverPrice').innerText = "₹" + Math.round(silver10g).toLocaleString('en-IN');
+            
+            // Format time professionally
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            document.getElementById('lastUpdated').innerText = "Last synced: " + new Date().toLocaleTimeString('en-IN', timeOptions);
+
+        } catch (error) {
+            console.error("API Error:", error);
+            document.getElementById('goldPrice').innerText = "Error";
+            document.getElementById('silverPrice').innerText = "Error";
+            document.getElementById('lastUpdated').innerText = "Connection failed. Retrying...";
         }
-        updateData();
-        setInterval(updateData, 1800000); // Auto-refreshes webpage every 30 mins
-    </script>
+    }
+
+    // Run automatically on load
+    fetchPrices();
+    
+    // Auto-refresh every 30 minutes (1800000 milliseconds)
+    setInterval(fetchPrices, 1800000);
+</script>
 </body>
 </html>
