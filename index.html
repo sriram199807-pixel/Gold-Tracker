@@ -11,81 +11,119 @@
         .container { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); padding: 30px; border-radius: 24px; width: 100%; max-width: 450px; border: 1px solid rgba(255, 255, 255, 0.1); }
         .header { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
         .live-dot { width: 10px; height: 10px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; }
-        select { width: 100%; padding: 12px; margin-bottom: 15px; background: #0f172a; color: white; border: 1px solid #334155; border-radius: 10px; }
+        select { width: 100%; padding: 12px; margin-bottom: 15px; background: #0f172a; color: white; border: 1px solid #334155; border-radius: 10px; outline: none; }
         .price-box { margin: 10px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 16px; border: 1px solid #1e293b; }
         .price-title { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
         .gold-value { font-size: 24px; font-weight: 800; color: #facc15; }
         .silver-value { font-size: 24px; font-weight: 800; color: #e2e8f0; }
         .chart-container { margin-top: 20px; }
         .history-box { margin-top: 15px; padding: 15px; background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; border-radius: 8px; display: none; font-size: 13px; }
-        .btn { background: #3b82f6; color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 700; margin-top: 15px; }
+        .btn { background: #3b82f6; color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 700; margin-top: 15px; transition: 0.2s; }
+        .btn:active { transform: scale(0.98); }
         .update-time { font-size: 11px; color: #64748b; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header"><div class="live-dot"></div><h1>Live TN Market</h1></div>
+    
     <select id="district" onchange="fetchData()">
         <option value="chennai">Chennai</option>
         <option value="coimbatore">Coimbatore</option>
     </select>
+
     <div class="price-box">
         <div class="price-title">22K Gold (8g / 1 Pavan)</div>
         <div class="gold-value" id="gold8g">₹0</div>
     </div>
+    
     <div style="display: flex; gap: 10px;">
-        <div class="price-box" style="flex: 1;"><div class="price-title">22K Gold (1g)</div><div class="gold-value" style="font-size: 18px;" id="gold1g">₹0</div></div>
-        <div class="price-box" style="flex: 1;"><div class="price-title">Silver (1g)</div><div class="silver-value" style="font-size: 18px;" id="silver1g">₹0</div></div>
+        <div class="price-box" style="flex: 1;">
+            <div class="price-title">22K Gold (1g)</div>
+            <div class="gold-value" style="font-size: 18px;" id="gold1g">₹0</div>
+        </div>
+        <div class="price-box" style="flex: 1;">
+            <div class="price-title">Silver (1g)</div>
+            <div class="silver-value" style="font-size: 18px;" id="silver1g">₹0</div>
+        </div>
     </div>
-    <div class="chart-container"><canvas id="trendChart" height="150"></canvas></div>
+
+    <div class="chart-container">
+        <canvas id="trendChart" height="150"></canvas>
+    </div>
+
     <div class="history-box" id="historyDetails">
         <div id="hDate" style="font-weight:bold; color:#3b82f6"></div>
         <div id="hStrategy" style="margin-top:5px; color:#cbd5e1"></div>
     </div>
+
     <button class="btn" onclick="fetchData()">Sync & Update Database</button>
     <div class="update-time" id="lastUpdated">Last updated: --</div>
 </div>
+
 <script>
     let myChart = null;
-    const API_URL = "YOUR_WEB_APP_URL_HERE"; // Paste your new URL from Step 1
+    
+    // 🔥 PASTE YOUR GOOGLE WEB APP URL HERE:
+    const API_URL = "YOUR_WEB_APP_URL_HERE"; 
 
     async function fetchData() {
-        document.getElementById('lastUpdated').innerText = "Syncing Cloud Database...";
+        document.getElementById('lastUpdated').innerText = "Syncing with MCX Database...";
         try {
             const res = await fetch(API_URL + "?district=" + document.getElementById('district').value);
             const data = await res.json();
+            
             if (data.status === "success") {
                 document.getElementById('gold1g').innerText = "₹" + data.live.gold1g.toLocaleString('en-IN');
                 document.getElementById('gold8g').innerText = "₹" + data.live.gold8g.toLocaleString('en-IN');
                 document.getElementById('silver1g').innerText = "₹" + data.live.silver1g.toLocaleString('en-IN');
-                document.getElementById('lastUpdated').innerText = "Success: " + new Date().toLocaleTimeString();
+                document.getElementById('lastUpdated').innerText = "Database Connected & Saved: " + new Date().toLocaleTimeString();
                 updateChart(data.history);
+            } else {
+                document.getElementById('lastUpdated').innerText = "Error: Check Apps Script Logs.";
             }
-        } catch (e) { document.getElementById('lastUpdated').innerText = "Database Offline."; }
+        } catch (e) { 
+            document.getElementById('lastUpdated').innerText = "Database connection failed."; 
+        }
     }
 
     function updateChart(history) {
         const ctx = document.getElementById('trendChart').getContext('2d');
         if (myChart) myChart.destroy();
+        
         myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: history.map(h => h.date),
-                datasets: [{ data: history.map(h => h.price1g), borderColor: '#facc15', backgroundColor: 'rgba(250, 204, 21, 0.1)', fill: true, tension: 0.3 }]
+                datasets: [{ 
+                    data: history.map(h => h.price1g), 
+                    borderColor: '#facc15', 
+                    backgroundColor: 'rgba(250, 204, 21, 0.1)', 
+                    fill: true, 
+                    tension: 0.3,
+                    pointBackgroundColor: '#facc15',
+                    pointRadius: 4
+                }]
             },
             options: {
                 plugins: { legend: { display: false } },
+                scales: {
+                    y: { ticks: { color: '#64748b' }, grid: { color: '#1e293b' } },
+                    x: { ticks: { color: '#64748b' }, grid: { display: false } }
+                },
                 onClick: (e, el) => {
                     if (el.length > 0) {
                         const h = history[el[0].index];
                         document.getElementById('historyDetails').style.display = 'block';
-                        document.getElementById('hDate').innerText = "Analysis for " + h.date;
+                        document.getElementById('hDate').innerText = "Market Status for " + h.date;
                         document.getElementById('hStrategy').innerText = h.reason;
                     }
                 }
             }
         });
     }
+    
+    // Auto-fetch on page load
     fetchData();
 </script>
 </body>
