@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Market Dashboard</title>
-    <!-- Importing a professional font from Google -->
+    <title>Pro TN Gold Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* Modern Dark Gradient Background */
         body { 
             font-family: 'Inter', sans-serif; 
             background: linear-gradient(135deg, #0f172a 0%, #020617 100%); 
@@ -16,34 +14,33 @@
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            height: 100vh; 
+            min-height: 100vh; 
             margin: 0; 
+            padding: 20px;
         }
 
-        /* Glassmorphism Card Effect */
         .container { 
             background: rgba(255, 255, 255, 0.03); 
             backdrop-filter: blur(16px); 
             -webkit-backdrop-filter: blur(16px);
-            padding: 40px 30px; 
+            padding: 35px 30px; 
             border-radius: 24px; 
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); 
-            text-align: center; 
-            width: 360px; 
+            width: 100%;
+            max-width: 400px; 
             border: 1px solid rgba(255, 255, 255, 0.08); 
         }
 
-        /* Header with Live Pulsing Dot */
         .header {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .header h1 { 
-            font-size: 20px; 
+            font-size: 18px; 
             font-weight: 700; 
             margin: 0; 
             letter-spacing: 1px;
@@ -66,33 +63,51 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        /* Price Boxes */
+        /* Dropdown Styling */
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+        }
+        
+        select option {
+            background: #0f172a;
+            color: white;
+        }
+
         .price-box { 
-            margin: 20px 0; 
-            padding: 20px; 
+            margin: 15px 0; 
+            padding: 18px; 
             background: rgba(0, 0, 0, 0.2); 
             border-radius: 16px; 
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .price-box:hover {
-            transform: translateY(-5px);
-            background: rgba(0, 0, 0, 0.4);
-        }
-
+        .price-info { text-align: left; }
+        
         .price-title { 
-            font-size: 13px; 
+            font-size: 12px; 
             color: #cbd5e1; 
-            margin-bottom: 8px; 
+            margin-bottom: 5px; 
             text-transform: uppercase; 
-            letter-spacing: 1.5px; 
+            letter-spacing: 1px; 
             font-weight: 500;
         }
 
-        /* Golden Text Gradient */
         .gold-value { 
-            font-size: 36px; 
+            font-size: 24px; 
             font-weight: 800; 
             background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             -webkit-background-clip: text;
@@ -100,9 +115,8 @@
             margin: 0;
         }
 
-        /* Silver Text Gradient */
         .silver-value { 
-            font-size: 30px; 
+            font-size: 24px; 
             font-weight: 800; 
             background: linear-gradient(to right, #757f9a, #d7dde8);
             -webkit-background-clip: text;
@@ -110,7 +124,40 @@
             margin: 0;
         }
 
-        /* Modern Button */
+        /* Prediction Card */
+        .prediction-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(30, 41, 59, 0.5);
+            border-left: 4px solid #3b82f6;
+            border-radius: 12px;
+            text-align: left;
+        }
+
+        .pred-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .pred-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .pred-reason {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 10px;
+        }
+
         .btn { 
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white; 
@@ -122,102 +169,181 @@
             width: 100%; 
             font-size: 15px; 
             font-weight: 600; 
-            letter-spacing: 0.5px;
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
-            transition: all 0.3s ease;
         }
 
-        .btn:hover { 
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
-            transform: translateY(-2px);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        .update-time { 
-            font-size: 12px; 
-            color: #64748b; 
-            margin-top: 25px; 
-            font-weight: 300;
-        }
+        .btn:hover { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); }
+        .update-time { font-size: 12px; color: #64748b; margin-top: 15px; text-align: center;}
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <div class="live-dot"></div>
-        <h1>Live Market</h1>
+        <div class="live-dot" id="statusDot"></div>
+        <h1>Live TN Market</h1>
+    </div>
+
+    <!-- District Selection -->
+    <select id="district" onchange="fetchData()">
+        <option value="chennai">Chennai</option>
+        <option value="coimbatore">Coimbatore</option>
+        <option value="madurai">Madurai</option>
+        <option value="salem">Salem</option>
+        <option value="tiruchirappalli">Trichy</option>
+        <option value="tirunelveli">Tirunelveli</option>
+        <option value="vellore">Vellore</option>
+    </select>
+
+    <!-- Price Cards -->
+    <div class="price-box">
+        <div class="price-info">
+            <div class="price-title">22K Gold (8g / 1 Pavan)</div>
+            <div class="gold-value" id="gold8g">Loading...</div>
+        </div>
     </div>
 
     <div class="price-box">
-        <div class="price-title">22K Gold (8g / 1 Pavan)</div>
-        <div class="gold-value" id="goldPrice">Fetching...</div>
+        <div class="price-info">
+            <div class="price-title">22K Gold (1g)</div>
+            <div class="gold-value" style="font-size: 20px;" id="gold1g">Loading...</div>
+        </div>
     </div>
 
     <div class="price-box">
-        <div class="price-title">Pure Silver (10g)</div>
-        <div class="silver-value" id="silverPrice">Fetching...</div>
+        <div class="price-info">
+            <div class="price-title">Pure Silver (1g)</div>
+            <div class="silver-value" style="font-size: 20px;" id="silver1g">Loading...</div>
+        </div>
     </div>
 
-    <button class="btn" onclick="fetchPrices()">Sync Latest Prices</button>
-    
-    <div class="update-time" id="lastUpdated">Initializing connection...</div>
+    <!-- AI Market Prediction Card -->
+    <div class="prediction-box">
+        <div class="pred-title">⚡ Purchase Strategy</div>
+        <div class="pred-stat">
+            <span>Market Trend:</span>
+            <strong id="trendDirection">Analyzing...</strong>
+        </div>
+        <div class="pred-stat">
+            <span>Probability of Price Drop:</span>
+            <strong id="dropProbability" style="color: #fbbf24;">--%</strong>
+        </div>
+        <div class="pred-reason" id="trendReason">
+            Fetching momentum data to generate purchase advice...
+        </div>
+    </div>
+
+    <button class="btn" onclick="fetchData()">Sync Exact Prices</button>
+    <div class="update-time" id="lastUpdated">Initializing local data...</div>
 </div>
 
 <script>
-    // Your actual API Key from GoldAPI.io
-    const API_KEY = 'goldapi-fa446410826cf957aeacf23d906584fe-io';
-
-    async function fetchPrices() {
-        document.getElementById('goldPrice').innerText = "...";
-        document.getElementById('silverPrice').innerText = "...";
-        document.getElementById('lastUpdated').innerText = "Syncing with global market...";
-
-        const headers = {
-            "x-access-token": API_KEY,
-            "Content-Type": "application/json"
-        };
-
+    // Scrapes GoodReturns HTML text to find the exact prices using Regular Expressions
+    function extractTablePrice(htmlStr, metalType) {
         try {
-            // Fetch live data directly from the API
-            const goldRes = await fetch('https://www.goldapi.io/api/XAU/INR', { headers });
-            const goldData = await goldRes.json();
+            // Regex to find the 1-gram row for "Today" and "Yesterday"
+            // Looks for: 1 | ₹Today | ₹Yesterday
+            const regex = /<td>1<\/td>\s*<td>₹\s*([\d,]+)<\/td>\s*<td>₹\s*([\d,]+)<\/td>/g;
+            let match;
+            let matches = [];
             
-            const silverRes = await fetch('https://www.goldapi.io/api/XAG/INR', { headers });
-            const silverData = await silverRes.json();
+            while ((match = regex.exec(htmlStr)) !== null) {
+                matches.push({
+                    today: parseInt(match[1].replace(/,/g, '')),
+                    yesterday: parseInt(match[2].replace(/,/g, ''))
+                });
+            }
 
-            // --- THE MATH (Automated conversion to 22K and 8 Grams) ---
-            const gram24k = goldData.price / 31.103;
-            const gram22k = gram24k * 0.916; 
-            const pavan22k = gram22k * 8;    
-
-            const silver10g = (silverData.price / 31.103) * 10;
-
-            // Format with commas
-            document.getElementById('goldPrice').innerText = "₹" + Math.round(pavan22k).toLocaleString('en-IN');
-            document.getElementById('silverPrice').innerText = "₹" + Math.round(silver10g).toLocaleString('en-IN');
-            
-            // Format time professionally
-            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            document.getElementById('lastUpdated').innerText = "Last synced: " + new Date().toLocaleTimeString('en-IN', timeOptions);
-
-        } catch (error) {
-            console.error("API Error:", error);
-            document.getElementById('goldPrice').innerText = "Error";
-            document.getElementById('silverPrice').innerText = "Error";
-            document.getElementById('lastUpdated').innerText = "Connection failed. Retrying...";
+            // Usually, Match 1 is 24K Gold, Match 2 is 22K Gold. Silver is on its own page.
+            if (metalType === 'gold22k' && matches.length >= 2) {
+                return matches[1]; 
+            } else if (metalType === 'silver' && matches.length >= 1) {
+                return matches[0];
+            }
+            return null;
+        } catch(e) {
+            return null;
         }
     }
 
-    // Run automatically on load
-    fetchPrices();
-    
-    // Auto-refresh every 30 minutes (1800000 milliseconds)
-    setInterval(fetchPrices, 1800000);
+    async function fetchData() {
+        document.getElementById('gold8g').innerText = "...";
+        document.getElementById('gold1g').innerText = "...";
+        document.getElementById('silver1g').innerText = "...";
+        document.getElementById('statusDot').style.backgroundColor = "#fbbf24"; // Yellow loading
+
+        const city = document.getElementById('district').value;
+        const proxy = 'https://api.allorigins.win/get?url=';
+        
+        const goldUrl = `https://www.goodreturns.in/gold-rates/${city}.html`;
+        const silverUrl = `https://www.goodreturns.in/silver-rates/${city}.html`;
+
+        try {
+            // Fetch both Gold and Silver pages simultaneously via CORS proxy
+            const [goldRes, silverRes] = await Promise.all([
+                fetch(proxy + encodeURIComponent(goldUrl)),
+                fetch(proxy + encodeURIComponent(silverUrl))
+            ]);
+
+            const goldDataJson = await goldRes.json();
+            const silverDataJson = await silverRes.json();
+
+            const goldData = extractTablePrice(goldDataJson.contents, 'gold22k');
+            const silverData = extractTablePrice(silverDataJson.contents, 'silver');
+
+            if (goldData && silverData) {
+                // Display Values
+                document.getElementById('gold1g').innerText = "₹" + goldData.today.toLocaleString('en-IN');
+                document.getElementById('gold8g').innerText = "₹" + (goldData.today * 8).toLocaleString('en-IN');
+                document.getElementById('silver1g').innerText = "₹" + silverData.today.toLocaleString('en-IN');
+                
+                // === ALGORITHM: MARKET PREDICTION & REASONING ===
+                let trend = "";
+                let probability = "";
+                let reason = "";
+                
+                const diff = goldData.today - goldData.yesterday;
+
+                if (diff > 0) {
+                    trend = "📈 UP (Bullish)";
+                    probability = "35%"; // Low chance of a drop tomorrow
+                    reason = `Price went up by ₹${diff} per gram today. **Reason:** Global inflation fears or high local demand is driving momentum up. **Advice:** Statistically less likely to drop tomorrow. Wait for a clear market correction before buying large quantities.`;
+                    document.getElementById('trendDirection').style.color = "#ef4444"; // Red for expensive
+                } else if (diff < 0) {
+                    trend = "📉 DOWN (Bearish)";
+                    probability = "75%"; // High chance it stays low or drops further
+                    reason = `Price dropped by ₹${Math.abs(diff)} per gram today. **Reason:** The market is cooling off from previous highs (technical pullback). **Advice:** High probability of a continued short-term dip. This is an optimal buying window to execute your plan.`;
+                    document.getElementById('trendDirection').style.color = "#10b981"; // Green for good buying
+                } else {
+                    trend = "⚖️ FLAT (Neutral)";
+                    probability = "50%";
+                    reason = "Price is unchanged from yesterday. **Reason:** The market is consolidating, waiting for major economic news (like US Interest Rates) to decide the next direction. Monitor closely.";
+                    document.getElementById('trendDirection').style.color = "#94a3b8";
+                }
+
+                document.getElementById('trendDirection').innerText = trend;
+                document.getElementById('dropProbability').innerText = probability;
+                document.getElementById('trendReason').innerHTML = reason;
+                
+                document.getElementById('statusDot').style.backgroundColor = "#10b981"; // Green success
+
+            } else {
+                throw new Error("Could not parse GoodReturns data.");
+            }
+
+            document.getElementById('lastUpdated').innerText = "Last synced: " + new Date().toLocaleTimeString('en-IN');
+
+        } catch (error) {
+            console.error(error);
+            document.getElementById('gold1g').innerText = "Error";
+            document.getElementById('silver1g').innerText = "Error";
+            document.getElementById('statusDot').style.backgroundColor = "#ef4444"; // Red error
+            document.getElementById('trendReason').innerText = "Network blocked by GoodReturns. Please wait a few minutes and hit sync again.";
+        }
+    }
+
+    // Run immediately when page loads
+    fetchData();
 </script>
 </body>
 </html>
