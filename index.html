@@ -5,175 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pro TN Gold Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #0f172a 0%, #020617 100%); 
-            color: #ffffff; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            padding: 20px;
-        }
-
-        .container { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px);
-            padding: 35px 30px; 
-            border-radius: 24px; 
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); 
-            width: 100%;
-            max-width: 400px; 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .header h1 { 
-            font-size: 18px; 
-            font-weight: 700; 
-            margin: 0; 
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: #94a3b8;
-        }
-
-        .live-dot {
-            width: 10px;
-            height: 10px;
-            background-color: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #10b981;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        /* Dropdown Styling */
-        select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            outline: none;
-            cursor: pointer;
-            appearance: none;
-        }
-        
-        select option {
-            background: #0f172a;
-            color: white;
-        }
-
-        .price-box { 
-            margin: 15px 0; 
-            padding: 18px; 
-            background: rgba(0, 0, 0, 0.2); 
-            border-radius: 16px; 
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .price-info { text-align: left; }
-        
-        .price-title { 
-            font-size: 12px; 
-            color: #cbd5e1; 
-            margin-bottom: 5px; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            font-weight: 500;
-        }
-
-        .gold-value { 
-            font-size: 24px; 
-            font-weight: 800; 
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
-
-        .silver-value { 
-            font-size: 24px; 
-            font-weight: 800; 
-            background: linear-gradient(to right, #757f9a, #d7dde8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
-
-        /* Prediction Card */
-        .prediction-box {
-            margin-top: 25px;
-            padding: 20px;
-            background: rgba(30, 41, 59, 0.5);
-            border-left: 4px solid #3b82f6;
-            border-radius: 12px;
-            text-align: left;
-        }
-
-        .pred-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #60a5fa;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .pred-stat {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .pred-reason {
-            font-size: 12px;
-            color: #94a3b8;
-            line-height: 1.5;
-            margin-top: 10px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 10px;
-        }
-
-        .btn { 
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white; 
-            border: none; 
-            padding: 14px 20px; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            margin-top: 20px; 
-            width: 100%; 
-            font-size: 15px; 
-            font-weight: 600; 
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
-        }
-
-        .btn:hover { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); }
-        .update-time { font-size: 12px; color: #64748b; margin-top: 15px; text-align: center;}
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); color: #ffffff; display: flex; justify-content: center; padding: 20px; margin: 0; min-height: 100vh; }
+        .container { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); padding: 30px; border-radius: 24px; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); width: 100%; max-width: 450px; border: 1px solid rgba(255, 255, 255, 0.08); }
+        .header { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .header h1 { font-size: 18px; font-weight: 700; margin: 0; color: #94a3b8; }
+        .live-dot { width: 10px; height: 10px; background-color: #fbbf24; border-radius: 50%; box-shadow: 0 0 10px #fbbf24; }
+        select { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.4); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; font-family: 'Inter'; outline: none; }
+        .price-box { margin: 10px 0; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); }
+        .price-title { font-size: 11px; color: #cbd5e1; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .gold-value { font-size: 22px; font-weight: 800; color: #facc15; margin: 0; }
+        .silver-value { font-size: 22px; font-weight: 800; color: #e2e8f0; margin: 0; }
+        .chart-container { margin-top: 20px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .history-box { margin-top: 15px; padding: 15px; background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 8px; display: none; font-size: 13px; }
+        .history-date { font-weight: bold; color: #10b981; margin-bottom: 5px; }
+        .btn { background: #3b82f6; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; margin-top: 15px; width: 100%; font-weight: 600; }
+        .btn:hover { background: #2563eb; }
+        .update-time { font-size: 11px; color: #64748b; margin-top: 10px; text-align: center;}
     </style>
 </head>
 <body>
@@ -181,168 +31,129 @@
 <div class="container">
     <div class="header">
         <div class="live-dot" id="statusDot"></div>
-        <h1>Live TN Market</h1>
+        <h1>Live TN Market + AI Tracker</h1>
     </div>
 
-    <!-- District Selection -->
     <select id="district" onchange="fetchData()">
         <option value="chennai">Chennai</option>
         <option value="coimbatore">Coimbatore</option>
         <option value="madurai">Madurai</option>
         <option value="salem">Salem</option>
-        <option value="tiruchirappalli">Trichy</option>
-        <option value="tirunelveli">Tirunelveli</option>
-        <option value="vellore">Vellore</option>
     </select>
 
-    <!-- Price Cards -->
     <div class="price-box">
-        <div class="price-info">
-            <div class="price-title">22K Gold (8g / 1 Pavan)</div>
-            <div class="gold-value" id="gold8g">Loading...</div>
-        </div>
+        <div class="price-title">22K Gold (8g / 1 Pavan)</div>
+        <div class="gold-value" id="gold8g">Loading...</div>
     </div>
-
-    <div class="price-box">
-        <div class="price-info">
+    
+    <div style="display: flex; gap: 10px;">
+        <div class="price-box" style="flex: 1;">
             <div class="price-title">22K Gold (1g)</div>
-            <div class="gold-value" style="font-size: 20px;" id="gold1g">Loading...</div>
+            <div class="gold-value" style="font-size: 18px;" id="gold1g">...</div>
         </div>
-    </div>
-
-    <div class="price-box">
-        <div class="price-info">
+        <div class="price-box" style="flex: 1;">
             <div class="price-title">Pure Silver (1g)</div>
-            <div class="silver-value" style="font-size: 20px;" id="silver1g">Loading...</div>
+            <div class="silver-value" style="font-size: 18px;" id="silver1g">...</div>
         </div>
     </div>
 
-    <!-- AI Market Prediction Card -->
-    <div class="prediction-box">
-        <div class="pred-title">⚡ Purchase Strategy</div>
-        <div class="pred-stat">
-            <span>Market Trend:</span>
-            <strong id="trendDirection">Analyzing...</strong>
-        </div>
-        <div class="pred-stat">
-            <span>Probability of Price Drop:</span>
-            <strong id="dropProbability" style="color: #fbbf24;">--%</strong>
-        </div>
-        <div class="pred-reason" id="trendReason">
-            Fetching momentum data to generate purchase advice...
-        </div>
+    <div class="chart-container">
+        <canvas id="trendChart" height="150"></canvas>
     </div>
 
-    <button class="btn" onclick="fetchData()">Sync Exact Prices</button>
-    <div class="update-time" id="lastUpdated">Initializing local data...</div>
+    <div class="history-box" id="historyDetails">
+        <div class="history-date" id="hDate">Select a point on the graph</div>
+        <div style="margin-bottom: 5px;"><strong>Price:</strong> <span id="hPrice"></span></div>
+        <div style="margin-bottom: 5px;"><strong>Prediction made:</strong> <span id="hPrediction"></span></div>
+        <div><strong>Reasoning:</strong> <span id="hReason" style="color: #94a3b8;"></span></div>
+    </div>
+
+    <button class="btn" onclick="fetchData()">Sync Market & Save Database</button>
+    <div class="update-time" id="lastUpdated">Connecting to Google Servers...</div>
 </div>
 
 <script>
-    // Scrapes GoodReturns HTML text to find the exact prices using Regular Expressions
-    function extractTablePrice(htmlStr, metalType) {
-        try {
-            // Regex to find the 1-gram row for "Today" and "Yesterday"
-            // Looks for: 1 | ₹Today | ₹Yesterday
-            const regex = /<td>1<\/td>\s*<td>₹\s*([\d,]+)<\/td>\s*<td>₹\s*([\d,]+)<\/td>/g;
-            let match;
-            let matches = [];
-            
-            while ((match = regex.exec(htmlStr)) !== null) {
-                matches.push({
-                    today: parseInt(match[1].replace(/,/g, '')),
-                    yesterday: parseInt(match[2].replace(/,/g, ''))
-                });
-            }
+    let myChart = null;
 
-            // Usually, Match 1 is 24K Gold, Match 2 is 22K Gold. Silver is on its own page.
-            if (metalType === 'gold22k' && matches.length >= 2) {
-                return matches[1]; 
-            } else if (metalType === 'silver' && matches.length >= 1) {
-                return matches[0];
-            }
-            return null;
-        } catch(e) {
-            return null;
-        }
-    }
+    // --- PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ---
+    const API_URL = "https://script.google.com/macros/s/AKfycbw-YSw-IP8Hpqpl3x5spYLFqwtSHh9fAool9gLjdIOz5Al04gD6T3F3o8n9v4irliFM/exec";
 
     async function fetchData() {
-        document.getElementById('gold8g').innerText = "...";
-        document.getElementById('gold1g').innerText = "...";
-        document.getElementById('silver1g').innerText = "...";
-        document.getElementById('statusDot').style.backgroundColor = "#fbbf24"; // Yellow loading
-
+        document.getElementById('statusDot').style.backgroundColor = "#fbbf24"; 
+        document.getElementById('lastUpdated').innerText = "Fetching from Database...";
         const city = document.getElementById('district').value;
-        const proxy = 'https://api.allorigins.win/get?url=';
         
-        const goldUrl = `https://www.goodreturns.in/gold-rates/${city}.html`;
-        const silverUrl = `https://www.goodreturns.in/silver-rates/${city}.html`;
-
         try {
-            // Fetch both Gold and Silver pages simultaneously via CORS proxy
-            const [goldRes, silverRes] = await Promise.all([
-                fetch(proxy + encodeURIComponent(goldUrl)),
-                fetch(proxy + encodeURIComponent(silverUrl))
-            ]);
+            const response = await fetch(API_URL + "?district=" + city);
+            const data = await response.json();
 
-            const goldDataJson = await goldRes.json();
-            const silverDataJson = await silverRes.json();
-
-            const goldData = extractTablePrice(goldDataJson.contents, 'gold22k');
-            const silverData = extractTablePrice(silverDataJson.contents, 'silver');
-
-            if (goldData && silverData) {
-                // Display Values
-                document.getElementById('gold1g').innerText = "₹" + goldData.today.toLocaleString('en-IN');
-                document.getElementById('gold8g').innerText = "₹" + (goldData.today * 8).toLocaleString('en-IN');
-                document.getElementById('silver1g').innerText = "₹" + silverData.today.toLocaleString('en-IN');
+            if (data.status === "success") {
+                // Update UI Prices
+                document.getElementById('gold1g').innerText = "₹" + data.live.gold1g.toLocaleString('en-IN');
+                document.getElementById('gold8g').innerText = "₹" + data.live.gold8g.toLocaleString('en-IN');
+                document.getElementById('silver1g').innerText = "₹" + data.live.silver1g.toLocaleString('en-IN');
                 
-                // === ALGORITHM: MARKET PREDICTION & REASONING ===
-                let trend = "";
-                let probability = "";
-                let reason = "";
+                document.getElementById('statusDot').style.backgroundColor = "#10b981"; 
+                document.getElementById('lastUpdated').innerText = "Cloud Sync Complete!";
                 
-                const diff = goldData.today - goldData.yesterday;
-
-                if (diff > 0) {
-                    trend = "📈 UP (Bullish)";
-                    probability = "35%"; // Low chance of a drop tomorrow
-                    reason = `Price went up by ₹${diff} per gram today. **Reason:** Global inflation fears or high local demand is driving momentum up. **Advice:** Statistically less likely to drop tomorrow. Wait for a clear market correction before buying large quantities.`;
-                    document.getElementById('trendDirection').style.color = "#ef4444"; // Red for expensive
-                } else if (diff < 0) {
-                    trend = "📉 DOWN (Bearish)";
-                    probability = "75%"; // High chance it stays low or drops further
-                    reason = `Price dropped by ₹${Math.abs(diff)} per gram today. **Reason:** The market is cooling off from previous highs (technical pullback). **Advice:** High probability of a continued short-term dip. This is an optimal buying window to execute your plan.`;
-                    document.getElementById('trendDirection').style.color = "#10b981"; // Green for good buying
-                } else {
-                    trend = "⚖️ FLAT (Neutral)";
-                    probability = "50%";
-                    reason = "Price is unchanged from yesterday. **Reason:** The market is consolidating, waiting for major economic news (like US Interest Rates) to decide the next direction. Monitor closely.";
-                    document.getElementById('trendDirection').style.color = "#94a3b8";
-                }
-
-                document.getElementById('trendDirection').innerText = trend;
-                document.getElementById('dropProbability').innerText = probability;
-                document.getElementById('trendReason').innerHTML = reason;
-                
-                document.getElementById('statusDot').style.backgroundColor = "#10b981"; // Green success
-
+                // Draw Chart
+                updateChart(data.history);
             } else {
-                throw new Error("Could not parse GoodReturns data.");
+                throw new Error(data.message);
             }
-
-            document.getElementById('lastUpdated').innerText = "Last synced: " + new Date().toLocaleTimeString('en-IN');
-
         } catch (error) {
             console.error(error);
-            document.getElementById('gold1g').innerText = "Error";
-            document.getElementById('silver1g').innerText = "Error";
-            document.getElementById('statusDot').style.backgroundColor = "#ef4444"; // Red error
-            document.getElementById('trendReason').innerText = "Network blocked by GoodReturns. Please wait a few minutes and hit sync again.";
+            document.getElementById('statusDot').style.backgroundColor = "#ef4444"; 
+            document.getElementById('lastUpdated').innerText = "Database connection failed.";
         }
     }
 
-    // Run immediately when page loads
+    function updateChart(history) {
+        if (history.length === 0) return;
+        const labels = history.map(item => item.date);
+        const dataPoints = history.map(item => item.price1g);
+
+        const ctx = document.getElementById('trendChart').getContext('2d');
+        if (myChart) myChart.destroy(); 
+
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '22K Gold (1g)',
+                    data: dataPoints,
+                    borderColor: '#facc15',
+                    backgroundColor: 'rgba(250, 204, 21, 0.1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#10b981',
+                    pointRadius: 4,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+                },
+                onClick: (e, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const selectedData = history[index];
+                        document.getElementById('historyDetails').style.display = 'block';
+                        document.getElementById('hDate').innerText = "Analysis for " + selectedData.date;
+                        document.getElementById('hPrice').innerText = "₹" + selectedData.price1g;
+                        document.getElementById('hPrediction').innerText = selectedData.prediction;
+                        document.getElementById('hReason').innerText = selectedData.reason;
+                    }
+                }
+            }
+        });
+    }
+
     fetchData();
 </script>
 </body>
