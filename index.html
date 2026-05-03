@@ -3,157 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro TN Gold Dashboard</title>
+    <title>Pro TN Gold Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); color: #ffffff; display: flex; justify-content: center; padding: 20px; margin: 0; min-height: 100vh; }
-        .container { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); padding: 30px; border-radius: 24px; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); width: 100%; max-width: 450px; border: 1px solid rgba(255, 255, 255, 0.08); }
+        body { font-family: 'Inter', sans-serif; background: #020617; color: #ffffff; display: flex; justify-content: center; padding: 20px; margin: 0; min-height: 100vh; }
+        .container { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); padding: 30px; border-radius: 24px; width: 100%; max-width: 450px; border: 1px solid rgba(255, 255, 255, 0.1); }
         .header { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .header h1 { font-size: 18px; font-weight: 700; margin: 0; color: #94a3b8; }
-        .live-dot { width: 10px; height: 10px; background-color: #fbbf24; border-radius: 50%; box-shadow: 0 0 10px #fbbf24; }
-        select { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.4); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; font-family: 'Inter'; outline: none; }
-        .price-box { margin: 10px 0; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); }
-        .price-title { font-size: 11px; color: #cbd5e1; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .gold-value { font-size: 22px; font-weight: 800; color: #facc15; margin: 0; }
-        .silver-value { font-size: 22px; font-weight: 800; color: #e2e8f0; margin: 0; }
-        .chart-container { margin-top: 20px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .history-box { margin-top: 15px; padding: 15px; background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 8px; display: none; font-size: 13px; }
-        .history-date { font-weight: bold; color: #10b981; margin-bottom: 5px; }
-        .btn { background: #3b82f6; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; margin-top: 15px; width: 100%; font-weight: 600; }
-        .btn:hover { background: #2563eb; }
-        .update-time { font-size: 11px; color: #64748b; margin-top: 10px; text-align: center;}
+        .live-dot { width: 10px; height: 10px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; }
+        select { width: 100%; padding: 12px; margin-bottom: 15px; background: #0f172a; color: white; border: 1px solid #334155; border-radius: 10px; }
+        .price-box { margin: 10px 0; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 16px; border: 1px solid #1e293b; }
+        .price-title { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .gold-value { font-size: 24px; font-weight: 800; color: #facc15; }
+        .silver-value { font-size: 24px; font-weight: 800; color: #e2e8f0; }
+        .chart-container { margin-top: 20px; }
+        .history-box { margin-top: 15px; padding: 15px; background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; border-radius: 8px; display: none; font-size: 13px; }
+        .btn { background: #3b82f6; color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 700; margin-top: 15px; }
+        .update-time { font-size: 11px; color: #64748b; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
-
 <div class="container">
-    <div class="header">
-        <div class="live-dot" id="statusDot"></div>
-        <h1>Live TN Market + AI Tracker</h1>
-    </div>
-
+    <div class="header"><div class="live-dot"></div><h1>Live TN Market</h1></div>
     <select id="district" onchange="fetchData()">
         <option value="chennai">Chennai</option>
         <option value="coimbatore">Coimbatore</option>
-        <option value="madurai">Madurai</option>
-        <option value="salem">Salem</option>
     </select>
-
     <div class="price-box">
         <div class="price-title">22K Gold (8g / 1 Pavan)</div>
-        <div class="gold-value" id="gold8g">Loading...</div>
+        <div class="gold-value" id="gold8g">₹0</div>
     </div>
-    
     <div style="display: flex; gap: 10px;">
-        <div class="price-box" style="flex: 1;">
-            <div class="price-title">22K Gold (1g)</div>
-            <div class="gold-value" style="font-size: 18px;" id="gold1g">...</div>
-        </div>
-        <div class="price-box" style="flex: 1;">
-            <div class="price-title">Pure Silver (1g)</div>
-            <div class="silver-value" style="font-size: 18px;" id="silver1g">...</div>
-        </div>
+        <div class="price-box" style="flex: 1;"><div class="price-title">22K Gold (1g)</div><div class="gold-value" style="font-size: 18px;" id="gold1g">₹0</div></div>
+        <div class="price-box" style="flex: 1;"><div class="price-title">Silver (1g)</div><div class="silver-value" style="font-size: 18px;" id="silver1g">₹0</div></div>
     </div>
-
-    <div class="chart-container">
-        <canvas id="trendChart" height="150"></canvas>
-    </div>
-
+    <div class="chart-container"><canvas id="trendChart" height="150"></canvas></div>
     <div class="history-box" id="historyDetails">
-        <div class="history-date" id="hDate">Select a point on the graph</div>
-        <div style="margin-bottom: 5px;"><strong>Price:</strong> <span id="hPrice"></span></div>
-        <div style="margin-bottom: 5px;"><strong>Prediction made:</strong> <span id="hPrediction"></span></div>
-        <div><strong>Reasoning:</strong> <span id="hReason" style="color: #94a3b8;"></span></div>
+        <div id="hDate" style="font-weight:bold; color:#3b82f6"></div>
+        <div id="hStrategy" style="margin-top:5px; color:#cbd5e1"></div>
     </div>
-
-    <button class="btn" onclick="fetchData()">Sync Market & Save Database</button>
-    <div class="update-time" id="lastUpdated">Connecting to Google Servers...</div>
+    <button class="btn" onclick="fetchData()">Sync & Update Database</button>
+    <div class="update-time" id="lastUpdated">Last updated: --</div>
 </div>
-
 <script>
     let myChart = null;
-
-    // --- PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ---
-    const API_URL = "https://script.google.com/macros/s/AKfycbw-YSw-IP8Hpqpl3x5spYLFqwtSHh9fAool9gLjdIOz5Al04gD6T3F3o8n9v4irliFM/exec";
+    const API_URL = "YOUR_WEB_APP_URL_HERE"; // Paste your new URL from Step 1
 
     async function fetchData() {
-        document.getElementById('statusDot').style.backgroundColor = "#fbbf24"; 
-        document.getElementById('lastUpdated').innerText = "Fetching from Database...";
-        const city = document.getElementById('district').value;
-        
+        document.getElementById('lastUpdated').innerText = "Syncing Cloud Database...";
         try {
-            const response = await fetch(API_URL + "?district=" + city);
-            const data = await response.json();
-
+            const res = await fetch(API_URL + "?district=" + document.getElementById('district').value);
+            const data = await res.json();
             if (data.status === "success") {
-                // Update UI Prices
                 document.getElementById('gold1g').innerText = "₹" + data.live.gold1g.toLocaleString('en-IN');
                 document.getElementById('gold8g').innerText = "₹" + data.live.gold8g.toLocaleString('en-IN');
                 document.getElementById('silver1g').innerText = "₹" + data.live.silver1g.toLocaleString('en-IN');
-                
-                document.getElementById('statusDot').style.backgroundColor = "#10b981"; 
-                document.getElementById('lastUpdated').innerText = "Cloud Sync Complete!";
-                
-                // Draw Chart
+                document.getElementById('lastUpdated').innerText = "Success: " + new Date().toLocaleTimeString();
                 updateChart(data.history);
-            } else {
-                throw new Error(data.message);
             }
-        } catch (error) {
-            console.error(error);
-            document.getElementById('statusDot').style.backgroundColor = "#ef4444"; 
-            document.getElementById('lastUpdated').innerText = "Database connection failed.";
-        }
+        } catch (e) { document.getElementById('lastUpdated').innerText = "Database Offline."; }
     }
 
     function updateChart(history) {
-        if (history.length === 0) return;
-        const labels = history.map(item => item.date);
-        const dataPoints = history.map(item => item.price1g);
-
         const ctx = document.getElementById('trendChart').getContext('2d');
-        if (myChart) myChart.destroy(); 
-
+        if (myChart) myChart.destroy();
         myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: labels,
-                datasets: [{
-                    label: '22K Gold (1g)',
-                    data: dataPoints,
-                    borderColor: '#facc15',
-                    backgroundColor: 'rgba(250, 204, 21, 0.1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#10b981',
-                    pointRadius: 4,
-                    fill: true,
-                    tension: 0.3
-                }]
+                labels: history.map(h => h.date),
+                datasets: [{ data: history.map(h => h.price1g), borderColor: '#facc15', backgroundColor: 'rgba(250, 204, 21, 0.1)', fill: true, tension: 0.3 }]
             },
             options: {
-                responsive: true,
                 plugins: { legend: { display: false } },
-                scales: {
-                    y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                    x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
-                },
-                onClick: (e, elements) => {
-                    if (elements.length > 0) {
-                        const index = elements[0].index;
-                        const selectedData = history[index];
+                onClick: (e, el) => {
+                    if (el.length > 0) {
+                        const h = history[el[0].index];
                         document.getElementById('historyDetails').style.display = 'block';
-                        document.getElementById('hDate').innerText = "Analysis for " + selectedData.date;
-                        document.getElementById('hPrice').innerText = "₹" + selectedData.price1g;
-                        document.getElementById('hPrediction').innerText = selectedData.prediction;
-                        document.getElementById('hReason').innerText = selectedData.reason;
+                        document.getElementById('hDate').innerText = "Analysis for " + h.date;
+                        document.getElementById('hStrategy').innerText = h.reason;
                     }
                 }
             }
         });
     }
-
     fetchData();
 </script>
 </body>
