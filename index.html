@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gold Prediction Dashboard</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #121212; color: white; padding: 50px; }
+        .card { background: #1e1e1e; padding: 20px; border-radius: 15px; display: inline-block; min-width: 300px; border: 1px solid #333; }
+        .price { font-size: 2.5em; color: #ffd700; margin: 10px 0; }
+        .update { font-size: 0.8em; color: #888; }
+        .signal { font-weight: bold; padding: 10px; border-radius: 5px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Live Gold/Silver Guide</h2>
+        <div id="goldPrice" class="price">Loading...</div>
+        <div id="silverPrice" style="color:#c0c0c0">Silver: --</div>
+        <div id="advice" class="signal">Analyzing...</div>
+        <p class="update">Last Updated: <span id="time">--</span></p>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbw-YSw-IP8Hpqpl3x5spYLFqwtSHh9fAool9gLjdIOz5Al04gD6T3F3o8n9v4irliFM/exec';
+        async function updateData() {
+            const response = await fetch(scriptURL);
+            const data = await response.json();
+            document.getElementById('goldPrice').innerText = "$" + data.gold;
+            document.getElementById('silverPrice').innerText = "Silver: $" + data.silver;
+            document.getElementById('time').innerText = data.lastUpdated;
+            
+            const adviceBox = document.getElementById('advice');
+            adviceBox.innerText = data.advice;
+            adviceBox.style.background = data.advice.includes("BUY") ? "#2e7d32" : "#c62828";
+        }
+        updateData();
+        setInterval(updateData, 1800000); // Auto-refreshes webpage every 30 mins
+    </script>
+</body>
+</html>
